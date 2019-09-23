@@ -1,0 +1,4 @@
+MyApp|1.0|1|1|0|9.99|Me|0|C++|
+Someone's App|2.3b|1|0|1|0|Some jerk|1|Java|
+Instagram|3.5|1|1|1|0|Facebook|0|Java|
+YetAnotherApp|0.7|0|1|0|5|Unknown|0|ObjectiveC|
