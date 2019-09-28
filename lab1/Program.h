@@ -14,6 +14,19 @@ public:
 	Program(std::string);
 	~Program();
 
+	friend bool operator==(const Program&, const Program&);
+	friend bool operator==(const std::string&, const Program&);
+	friend bool operator==(const Program&, const std::string&);
+
+	friend bool operator<(const Program&, const Program&);
+	friend bool operator<(const Program&, const double&);
+
+	friend bool operator>(const Program&, const Program&);
+	friend bool operator>(const Program&, const double&);
+
+	friend std::ostream& operator<< (std::ostream&, const Program&);
+	friend std::istream& operator>> (std::istream&, Program&);
+
 	std::string getName();
 	void setName(std::string );
 

@@ -22,6 +22,19 @@ LinkedList::LinkedList()
 	tail = nullptr;
 }
 
+LinkedList::LinkedList(const LinkedList& other)
+{
+	head = nullptr;
+	tail = nullptr;
+
+	ListElement* current_element = other.head;
+	while (current_element)
+	{
+		this->addTail(*(current_element->element));
+		current_element = current_element->next;
+	}
+}
+
 LinkedList::~LinkedList()
 {
 	ListElement* current_element = head;
@@ -33,9 +46,146 @@ LinkedList::~LinkedList()
 	}
 }
 
-void LinkedList::addTail(Program* element)
+LinkedList& LinkedList::operator=(const LinkedList& other)
 {
-	ListElement* temp = new ListElement(element);
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	ListElement* current_element = head;
+	while (current_element)
+	{
+		ListElement* temp = current_element;
+		current_element = current_element->next;
+		delete temp;
+	}
+
+	head = nullptr;
+	tail = nullptr;
+
+	current_element = other.head;
+	while (current_element)
+	{
+		this->addTail(*(current_element->element));
+		current_element = current_element->next;
+	}
+
+	return *this;
+}
+
+LinkedList& LinkedList::operator+=(const Program& rhs)
+{
+	this->addTail(rhs);
+	return *this;
+}
+
+LinkedList& LinkedList::operator-=(const std::string& rhs)
+{
+	ListElement* current_element = head;
+	ListElement* prev_element = nullptr;
+	ListElement* temp;
+	while (current_element)
+	{
+		if (*(current_element->element) == rhs)
+		{
+			if (current_element == head)
+			{
+				temp = current_element;
+				current_element = current_element->next;
+				head = current_element;
+				delete temp;
+			}
+			else if (current_element == tail)
+			{
+				tail = prev_element;
+				delete current_element;
+				current_element = nullptr;
+				prev_element->next = nullptr;
+			}
+			else
+			{
+				temp = current_element;
+				prev_element->next = current_element->next;
+				prev_element = current_element;
+				current_element = current_element->next;
+				delete temp;
+			}
+		}
+		else
+		{
+			prev_element = current_element;
+			current_element = current_element->next;
+		}
+	}
+	return *this;
+}
+
+std::ostream& operator<< (std::ostream& os, const LinkedList& rhs)
+{
+	LinkedList::ListElement* current_element;
+	int i = 0;
+	current_element = rhs.head;
+	while (current_element)
+	{
+		os << "Element #" << i << ":" << std::endl;
+		os << *(current_element->element) << std::endl;
+		current_element = current_element->next;
+		i++;
+	}
+	
+	return os;
+}
+
+void operator<< (std::ofstream& ofs, const LinkedList& rhs)
+{
+	LinkedList::ListElement* current_element = rhs.head;
+
+	if (ofs.is_open())
+	{
+		while (current_element)
+		{
+			ofs << current_element->element->toString() << "\n";
+			current_element = current_element->next;
+		}
+	}
+}
+
+void operator>> (std::ifstream& ifs, LinkedList& rhs)
+{
+	std::string line;
+
+	if (ifs.is_open())
+	{
+		while (getline(ifs, line))
+		{
+			rhs.addTail(Program(line));
+		}
+	}
+}
+
+Program& LinkedList::operator[] (int index)
+{
+	return this->get(index);
+}
+
+LinkedList operator+ (const Program& lhs, const LinkedList& rhs)
+{
+	LinkedList lst = rhs;
+	lst.addHead(lhs);
+	return lst;
+}
+
+LinkedList operator+ (const LinkedList& lhs, const Program& rhs)
+{
+	LinkedList lst = lhs;
+	lst.addTail(rhs);
+	return lst;
+}
+
+void LinkedList::addTail(Program element)
+{
+	ListElement* temp = new ListElement(new Program(element));
 	if (!head)
 	{
 		head = temp;
@@ -48,9 +198,9 @@ void LinkedList::addTail(Program* element)
 	}
 }
 
-void LinkedList::addHead(Program* element)
+void LinkedList::addHead(Program element)
 {
-	ListElement* temp = new ListElement(element);
+	ListElement* temp = new ListElement(new Program(element));
 	if (!head)
 	{
 		head = temp;
@@ -63,22 +213,7 @@ void LinkedList::addHead(Program* element)
 	}
 }
 
-void LinkedList::print()
-{
-	ListElement* current_element;
-	int i = 0;
-	current_element = head;
-	while (current_element)
-	{
-		std::cout << "Element #" << i << ":" << std::endl;
-		current_element->element->print();
-		std::cout << std::endl;
-		current_element = current_element->next;
-		i++;
-	}
-}
-
-bool LinkedList::insert(Program* element, int place)
+bool LinkedList::insert(Program element, int place)
 {
 	if (place < 0)
 	{
@@ -134,7 +269,7 @@ bool LinkedList::insert(Program* element, int place)
 	// we're inside the list and we need to insert new element in place of existing one
 	else
 	{
-		ListElement* temp = new ListElement(element);
+		ListElement* temp = new ListElement(new Program(element));
 		prev_element->next = temp;
 		temp->next = current_element;
 		return true;
@@ -248,6 +383,43 @@ bool LinkedList::remove(int place)
 	}
 }
 
+void LinkedList::print()
+{
+	ListElement* current_element;
+	int i = 0;
+	current_element = head;
+	while (current_element)
+	{
+		std::cout << "Element #" << i << ":" << std::endl;
+		current_element->element->print();
+		std::cout << std::endl;
+		current_element = current_element->next;
+		i++;
+	}
+}
+
+Program& LinkedList::get(int place)
+{
+	int current_idx = 0;
+	ListElement* current_element = head;
+
+	while (current_idx < place && current_element)
+	{
+		current_idx++;
+		current_element = current_element->next;
+	}
+
+	if (current_element)
+	{
+		return *(current_element->element);
+	}
+	else
+	{
+		std::cout << "Error getting list element: index is out of bounds" << std::endl;
+		std::exit(1);
+	}
+}
+
 void LinkedList::save(const char* filename)
 {
 	std::ofstream file(filename);
@@ -273,22 +445,22 @@ void LinkedList::load(const char* filename)
 	{
 		while (getline(file, line))
 		{
-			this->addTail(new Program(line));
+			this->addTail(Program(line));
 		}
 	}
 	file.close();
 }
 
-LinkedList* LinkedList::searchByName(std::string name)
+LinkedList LinkedList::searchByName(std::string name)
 {
-	LinkedList* result_list = new LinkedList();
+	LinkedList result_list;
 	ListElement* current_element = head;
 
 	while (current_element)
 	{
-		if (current_element->element->getName() == name)
+		if (*(current_element->element) == name)
 		{
-			result_list->addTail(current_element->element);
+			result_list.addTail(*(current_element->element));
 		}
 		current_element = current_element->next;
 	}

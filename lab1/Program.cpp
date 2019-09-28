@@ -31,6 +31,151 @@ Program::~Program()
 
 }
 
+bool operator==(const Program& lhs, const Program& rhs)
+{
+	if (lhs.name == rhs.name)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator==(const std::string& lhs, const Program& rhs)
+{
+	if (lhs == rhs.name)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator==(const Program& lhs, const std::string& rhs)
+{
+	if (lhs.name == rhs)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator<(const Program& lhs, const Program& rhs)
+{
+	if (lhs.price < rhs.price)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator<(const Program& lhs, const double& rhs)
+{
+	if (lhs.price < rhs)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator>(const Program& lhs, const Program& rhs)
+{
+	if (lhs.price > rhs.price)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator>(const Program& lhs, const double& rhs)
+{
+	if (lhs.price > rhs)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+std::ostream& operator<< (std::ostream& os, const Program& rhs)
+{
+	using namespace std;
+	os << left << setw(1) << "|" << setw(20) << "Name" << setw(1) << "|"
+		<< setw(8) << "Version" << setw(1) << "|"
+		<< setw(8) << "Android" << setw(1) << "|"
+		<< setw(5) << "iOS" << setw(1) << "|"
+		<< setw(5) << "Free" << setw(1) << "|"
+		<< setw(6) << "Price" << setw(1) << "|"
+		<< setw(20) << "Developer" << setw(1) << "|"
+		<< setw(12) << "Open-source" << setw(1) << "|"
+		<< setw(12) << "Language" << setw(1) << "|" << endl;
+	os << setfill('-');
+	os << left << setw(1) << "|" << setw(20) << "-" << setw(1) << "|"
+		<< setw(8) << "-" << setw(1) << "|"
+		<< setw(8) << "-" << setw(1) << "|"
+		<< setw(5) << "-" << setw(1) << "|"
+		<< setw(5) << "-" << setw(1) << "|"
+		<< setw(6) << "-" << setw(1) << "|"
+		<< setw(20) << "-" << setw(1) << "|"
+		<< setw(12) << "-" << setw(1) << "|"
+		<< setw(12) << "-" << setw(1) << "|" << endl;
+	os << boolalpha << setfill(' ');
+	os << left << setw(1) << "|" << setw(20) << rhs.name << setw(1) << "|"
+		<< setw(8) << rhs.version << setw(1) << "|"
+		<< setw(8) << rhs.android << setw(1) << "|"
+		<< setw(5) << rhs.ios << setw(1) << "|"
+		<< setw(5) << rhs.free << setw(1) << "|"
+		<< setw(6) << rhs.price << setw(1) << "|"
+		<< setw(20) << rhs.developer << setw(1) << "|"
+		<< setw(12) << rhs.open_source << setw(1) << "|"
+		<< setw(12) << rhs.lang << setw(1) << "|" << endl;
+	return os;
+}
+
+std::istream& operator>> (std::istream& is, Program& rhs)
+{
+	using namespace std;
+
+	cout << "Name?\n> ";
+	is >> rhs.name;
+	cout << "Version?\n> ";
+	is >> rhs.version;
+	cout << "Android? (0 or 1)\n> ";
+	is >> rhs.android;
+	cout << "iOS? (0 or 1)\n> ";
+	is >> rhs.ios;
+	cout << "Free? (0 or 1)\n> ";
+	is >> rhs.free;
+	cout << "Price?\n> ";
+	is >> rhs.price;
+	cout << "Developer?\n> ";
+	is >> rhs.developer;
+	cout << "Open-source? (0 or 1)\n> ";
+	is >> rhs.open_source;
+	cout << "Language?\n> ";
+	is >> rhs.lang;
+
+	return is;
+}
+
 std::string Program::getName() { return name; }
 void Program::setName(std::string name) { this->name = name; }
 
@@ -157,3 +302,4 @@ void Program::fromString(std::string str)
 	getline(ss, field_value, '|');
 	lang = field_value;
 }
+
