@@ -21,6 +21,8 @@ private:
 	ListElement* head;
 	ListElement* tail;
 
+	Program& getByNegativeIndex(int );
+
 public:
 	LinkedList();
 	LinkedList(const LinkedList&);

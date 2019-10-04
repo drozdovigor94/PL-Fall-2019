@@ -16,6 +16,29 @@ LinkedList::ListElement::~ListElement()
 	delete element;
 }
 
+Program& LinkedList::getByNegativeIndex(int neg_index)
+{
+	ListElement* current_element = head;
+	int size = 0;
+	
+	while (current_element)
+	{
+		size++;
+		current_element = current_element->next;
+	}
+
+	int pos_index = size + neg_index;
+	if (pos_index < 0)
+	{
+		std::cout << "Error getting list element: index is out of bounds" << std::endl;
+		std::exit(1);
+	}
+	else
+	{
+		return this->get(pos_index);
+	}
+}
+
 LinkedList::LinkedList()
 {
 	head = nullptr;
@@ -165,8 +188,15 @@ void operator>> (std::ifstream& ifs, LinkedList& rhs)
 }
 
 Program& LinkedList::operator[] (int index)
-{
-	return this->get(index);
+{	
+	if (index < 0)
+	{
+		return this->getByNegativeIndex(index);
+	}
+	else
+	{
+		return this->get(index);
+	}
 }
 
 LinkedList operator+ (const Program& lhs, const LinkedList& rhs)
@@ -402,6 +432,12 @@ Program& LinkedList::get(int place)
 {
 	int current_idx = 0;
 	ListElement* current_element = head;
+
+	if (place < 0)
+	{
+		std::cout << "Error getting list element: index is out of bounds" << std::endl;
+		std::exit(1);
+	}
 
 	while (current_idx < place && current_element)
 	{
