@@ -213,7 +213,7 @@ LinkedList operator+ (const LinkedList& lhs, const Program& rhs)
 	return lst;
 }
 
-void LinkedList::addTail(Program element)
+void LinkedList::addTail(const Program& element)
 {
 	ListElement* temp = new ListElement(new Program(element));
 	if (!head)
@@ -228,7 +228,7 @@ void LinkedList::addTail(Program element)
 	}
 }
 
-void LinkedList::addHead(Program element)
+void LinkedList::addHead(const Program& element)
 {
 	ListElement* temp = new ListElement(new Program(element));
 	if (!head)
@@ -243,7 +243,7 @@ void LinkedList::addHead(Program element)
 	}
 }
 
-bool LinkedList::insert(Program element, int place)
+bool LinkedList::insert(const Program& element, int place)
 {
 	if (place < 0)
 	{
@@ -306,51 +306,55 @@ bool LinkedList::insert(Program element, int place)
 	}
 }
 
-bool LinkedList::removeHead()
+Program LinkedList::removeHead()
 {
 	// can't remove from empty list
 	if (!head)
 	{
 		std::cout << "Failed to remove head element: list is empty" << std::endl;
-		return false;
+		exit(0);
 	}
 	// if list has only one element
 	else if (head == tail)
 	{
+		Program res = *head->element;
 		delete head;
 		head = nullptr;
 		tail = nullptr;
-		return true;
+		return res;
 	}
 	// if list has more than one element
 	else
 	{
+		Program res = *head->element;
 		ListElement* temp = head;
 		head = temp->next;
 		delete temp;
-		return true;
+		return res;
 	}
 }
 
-bool LinkedList::removeTail()
+Program LinkedList::removeTail()
 {
 	// can't remove from empty list
 	if (!head)
 	{
 		std::cout << "Failed to remove tail element: list is empty" << std::endl;
-		return false;
+		std::exit(1);
 	}
 	// if list has only one element
 	else if (head == tail)
 	{
+		Program res = *tail->element;
 		delete head;
 		head = nullptr;
 		tail = nullptr;
-		return true;
+		return res;
 	}
 	// if list has more than one element
 	else
 	{
+		Program res = *tail->element;
 		ListElement* current_element = head;
 		while (current_element->next != tail)
 		{
@@ -359,7 +363,7 @@ bool LinkedList::removeTail()
 		tail = current_element;
 		delete current_element->next;
 		current_element->next = nullptr;
-		return true;
+		return res;
 	}
 }
 
@@ -373,7 +377,8 @@ bool LinkedList::remove(int place)
 
 	if (place == 0)
 	{
-		return this->removeHead();
+		this->removeHead();
+		return true;
 	}
 	else if (!head || head == tail)
 	{
@@ -502,4 +507,16 @@ LinkedList LinkedList::searchByName(std::string name)
 	}
 
 	return result_list;
+}
+
+bool LinkedList::isEmpty()
+{
+	if (!head)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

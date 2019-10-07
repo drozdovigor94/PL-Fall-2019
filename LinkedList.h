@@ -8,7 +8,7 @@
 
 class LinkedList
 {
-private:
+protected:
 	struct ListElement
 	{
 		Program* element;
@@ -40,12 +40,12 @@ public:
 
 	Program& operator[] (int index);
 
-	void addTail(Program );
-	void addHead(Program );
-	bool insert(Program , int );
+	void addTail(const Program& );
+	void addHead(const Program& );
+	bool insert(const Program& , int );
 
-	bool removeHead();
-	bool removeTail();
+	Program removeHead();
+	Program removeTail();
 	bool remove(int );
 
 	Program& get(int);
@@ -55,6 +55,8 @@ public:
 	void save(const char* );
 	void load(const char* );
 	LinkedList searchByName(std::string );
+
+	bool isEmpty();
 };
 
 LinkedList operator+ (const Program&, const LinkedList&);
