@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Program.h"
+#include "MyException.h"
 
 
 class LinkedList
@@ -42,11 +43,11 @@ public:
 
 	void addTail(const Program& );
 	void addHead(const Program& );
-	bool insert(const Program& , int );
+	void insert(const Program& , int );
 
 	Program removeHead();
 	Program removeTail();
-	bool remove(int );
+	void remove(int );
 
 	Program& get(int);
 

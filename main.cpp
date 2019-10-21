@@ -25,7 +25,10 @@ void testPushPop(PushPop* pp)
 
 int main()
 {
-	Queue q;
-	testPushPop(&q);
+	LinkedList lst;
+	std::ifstream ifs("list.txt");
+	ifs >> lst;
+	std::cout << lst;
+
 	return 0;
 }

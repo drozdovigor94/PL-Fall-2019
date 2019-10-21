@@ -30,8 +30,7 @@ Program& LinkedList::getByNegativeIndex(int neg_index)
 	int pos_index = size + neg_index;
 	if (pos_index < 0)
 	{
-		std::cout << "Error getting list element: index is out of bounds" << std::endl;
-		std::exit(1);
+		throw ListWrongIndexException(neg_index);
 	}
 	else
 	{
@@ -243,25 +242,22 @@ void LinkedList::addHead(const Program& element)
 	}
 }
 
-bool LinkedList::insert(const Program& element, int place)
+void LinkedList::insert(const Program& element, int place)
 {
 	if (place < 0)
 	{
-		std::cout << "List insert failed: index " << place << " is not a valid index" << std::endl;
-		return false;
+		throw ListWrongIndexException(place);
 	}
 
 	// if we're inserting at the beginning of the list, simply call addHead() method
 	if (place == 0)
 	{
 		this->addHead(element);
-		return true;
 	}
 	// but if not, and the list is empty, that's an error
 	else if (!head)
 	{
-		std::cout << "List insert failed: index " << place << " is out of list's range" << std::endl;
-		return false;
+		throw ListWrongIndexException(place);
 	}
 
 	// if our list is not empty, we're traversing it
@@ -286,13 +282,11 @@ bool LinkedList::insert(const Program& element, int place)
 		if (current_idx == place)
 		{
 			this->addTail(element);
-			return true;
 		}
 		// ...or the place we want is out of the list's range, so it's an error
 		else
 		{
-			std::cout << "List insert failed: index " << place << " is out of list's range" << std::endl;
-			return false;
+			throw ListWrongIndexException(place);
 		}
 
 	}
@@ -302,7 +296,6 @@ bool LinkedList::insert(const Program& element, int place)
 		ListElement* temp = new ListElement(new Program(element));
 		prev_element->next = temp;
 		temp->next = current_element;
-		return true;
 	}
 }
 
@@ -311,8 +304,7 @@ Program LinkedList::removeHead()
 	// can't remove from empty list
 	if (!head)
 	{
-		std::cout << "Failed to remove head element: list is empty" << std::endl;
-		exit(0);
+		throw ListEmptyOpException();
 	}
 	// if list has only one element
 	else if (head == tail)
@@ -339,8 +331,7 @@ Program LinkedList::removeTail()
 	// can't remove from empty list
 	if (!head)
 	{
-		std::cout << "Failed to remove tail element: list is empty" << std::endl;
-		std::exit(1);
+		throw ListEmptyOpException();
 	}
 	// if list has only one element
 	else if (head == tail)
@@ -367,23 +358,20 @@ Program LinkedList::removeTail()
 	}
 }
 
-bool LinkedList::remove(int place)
+void LinkedList::remove(int place)
 {
 	if (place < 0)
 	{
-		std::cout << "List remove failed: index " << place << " is not a valid index" << std::endl;
-		return false;
+		throw ListWrongIndexException(place);
 	}
 
 	if (place == 0)
 	{
 		this->removeHead();
-		return true;
 	}
 	else if (!head || head == tail)
 	{
-		std::cout << "Failed to remove element: index " << place << " is out of list's range" << std::endl;
-		return false;
+		throw ListWrongIndexException(place);
 	}
 
 	int current_idx = 0;
@@ -399,8 +387,7 @@ bool LinkedList::remove(int place)
 
 	if (!current_element)
 	{
-		std::cout << "Failed to remove element: index " << place << " is out of list's range" << std::endl;
-		return false;
+		throw ListWrongIndexException(place);
 	}
 
 	if (current_element == tail)
@@ -408,13 +395,11 @@ bool LinkedList::remove(int place)
 		tail = prev_element;
 		prev_element->next = nullptr;
 		delete current_element;
-		return true;
 	}
 	else
 	{
 		prev_element->next = current_element->next;
 		delete current_element;
-		return true;
 	}
 }
 
@@ -440,8 +425,7 @@ Program& LinkedList::get(int place)
 
 	if (place < 0)
 	{
-		std::cout << "Error getting list element: index is out of bounds" << std::endl;
-		std::exit(1);
+		throw ListWrongIndexException(place);
 	}
 
 	while (current_idx < place && current_element)
@@ -456,8 +440,7 @@ Program& LinkedList::get(int place)
 	}
 	else
 	{
-		std::cout << "Error getting list element: index is out of bounds" << std::endl;
-		std::exit(1);
+		throw ListWrongIndexException(place);
 	}
 }
 
