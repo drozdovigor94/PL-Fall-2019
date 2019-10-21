@@ -12,3 +12,8 @@ Program Stack::pop()
 {
 	return this->removeTail();
 }
+
+bool Stack::isEmpty()
+{
+	return LinkedList::isEmpty();
+}

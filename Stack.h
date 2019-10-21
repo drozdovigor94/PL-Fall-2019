@@ -2,8 +2,9 @@
 
 #include "Program.h"
 #include "LinkedList.h"
+#include "PushPop.h"
 
-class Stack : public LinkedList
+class Stack : public LinkedList, public PushPop
 {
 public:
 	Stack();
@@ -11,6 +12,7 @@ public:
 
 	void push(const Program&);
 	Program pop();
+	bool isEmpty();
 private:
 
 	using LinkedList::operator[];

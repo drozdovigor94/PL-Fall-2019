@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="PushPop.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Stack.h" />
   </ItemGroup>

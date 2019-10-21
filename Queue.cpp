@@ -12,3 +12,8 @@ Program Queue::pop()
 {
 	return this->removeTail();
 }
+
+bool Queue::isEmpty()
+{
+	return LinkedList::isEmpty();
+}
