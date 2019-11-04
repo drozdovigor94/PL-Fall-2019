@@ -29,6 +29,13 @@ int main()
 	std::ifstream ifs("list.txt");
 	ifs >> lst;
 	std::cout << lst;
-
+	try
+	{
+		std::cout << lst[10];
+	}
+	catch (ListWrongIndexException & e)
+	{
+		std::cout << e.what();
+	}
 	return 0;
 }

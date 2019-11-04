@@ -17,12 +17,14 @@ public:
 
 class ListWrongIndexException : public ListException
 {
-int idx;
+	std::string msg;
 public:
-	ListWrongIndexException(int idx) : idx(idx) {}
+	ListWrongIndexException(int idx)
+	{
+		this->msg = std::string("Index ") + std::to_string(idx) + std::string(" is not a valid index");
+	}
 	virtual const char* what() const noexcept 
 	{
-		std::string msg = std::string("Index ") + std::to_string(idx) + std::string(" is not a valid index");
 		return msg.c_str();
 	}
 };
