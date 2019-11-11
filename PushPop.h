@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Program.h"
-
+template <typename T>
 class PushPop
 {
 public:
-	virtual void push(const Program&) = 0;
-	virtual Program pop() = 0;
+	virtual void push(const T&) = 0;
+	virtual T pop() = 0;
 	virtual bool isEmpty() = 0;
 };

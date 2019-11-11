@@ -1,19 +1,25 @@
 #include "Stack.h"
 
-Stack::Stack() : LinkedList() {}
-Stack::Stack(const Stack& other) : LinkedList(other) {}
+template <typename T>
+Stack<T>::Stack() : LinkedList<T>() {}
 
-void Stack::push(const Program& element)
+template <typename T>
+Stack<T>::Stack(const Stack<T>& other) : LinkedList<T>(other) {}
+
+template <typename T>
+void Stack<T>::push(const T& element)
 {
 	this->addTail(element);
 }
 
-Program Stack::pop()
+template <typename T>
+T Stack<T>::pop()
 {
 	return this->removeTail();
 }
 
-bool Stack::isEmpty()
+template <typename T>
+bool Stack<T>::isEmpty()
 {
-	return LinkedList::isEmpty();
+	return LinkedList<T>::isEmpty();
 }

@@ -4,30 +4,31 @@
 #include "LinkedList.h"
 #include "PushPop.h"
 
-class Queue : public LinkedList, public PushPop
+template <typename T>
+class Queue : public LinkedList<T>, public PushPop<T>
 {
 public:
 	Queue();
-	Queue(const Queue&);
+	Queue(const Queue<T>&);
 
-	void push(const Program&);
-	Program pop();
+	void push(const T&);
+	T pop();
 	bool isEmpty();
 private:
 
-	using LinkedList::operator[];
+	using LinkedList<T>::operator[];
 
-	using LinkedList::operator+=;
-	using LinkedList::operator-=;
+	using LinkedList<T>::operator+=;
+	using LinkedList<T>::operator-=;
 
-	using LinkedList::addTail;
-	using LinkedList::addHead;
-	using LinkedList::insert;
+	using LinkedList<T>::addTail;
+	using LinkedList<T>::addHead;
+	using LinkedList<T>::insert;
 
-	using LinkedList::removeHead;
-	using LinkedList::removeTail;
-	using LinkedList::remove;
+	using LinkedList<T>::removeHead;
+	using LinkedList<T>::removeTail;
+	using LinkedList<T>::remove;
 
-	using LinkedList::get;
-	using LinkedList::searchByName;
+	using LinkedList<T>::get;
+	using LinkedList<T>::searchByName;
 };

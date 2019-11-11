@@ -1,6 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 class Program 
 {
@@ -27,31 +31,34 @@ public:
 	friend std::ostream& operator<< (std::ostream&, const Program&);
 	friend std::istream& operator>> (std::istream&, Program&);
 
-	std::string getName();
+	friend std::ofstream& operator<< (std::ofstream&, const Program&);
+	friend std::ifstream& operator>> (std::ifstream&, Program&);
+
+	std::string getName() const;
 	void setName(std::string );
 
-	std::string getVersion();
+	std::string getVersion() const;
 	void setVersion(std::string );
 
-	bool getAndroid();
+	bool getAndroid() const;
 	void setAndroid(bool );
 
-	bool getIos();
+	bool getIos() const;
 	void setIos(bool );
 
-	bool getFree();
+	bool getFree() const;
 	void setFree(bool );
 
-	double getPrice();
+	double getPrice() const;
 	void setPrice(float );
 
-	std::string getDeveloper();
+	std::string getDeveloper() const;
 	void setDeveloper(std::string );
 
-	bool getOpenSource();
+	bool getOpenSource() const;
 	void setOpenSource(bool );
 
-	std::string getLang();
+	std::string getLang() const;
 	void setLang(std::string );
 
 	void read();

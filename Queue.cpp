@@ -1,19 +1,25 @@
 #include "Queue.h"
 
-Queue::Queue() : LinkedList() {}
-Queue::Queue(const Queue& other) : LinkedList(other) {}
+template <typename T>
+Queue<T>::Queue() : LinkedList<T>() {}
 
-void Queue::push(const Program& element)
+template <typename T>
+Queue<T>::Queue(const Queue<T>& other) : LinkedList<T>(other) {}
+
+template <typename T>
+void Queue<T>::push(const T& element)
 {
 	this->addHead(element);
 }
 
-Program Queue::pop()
+template <typename T>
+T Queue<T>::pop()
 {
 	return this->removeTail();
 }
 
-bool Queue::isEmpty()
+template <typename T>
+bool Queue<T>::isEmpty()
 {
 	return LinkedList::isEmpty();
 }

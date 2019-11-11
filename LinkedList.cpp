@@ -5,18 +5,21 @@
 
 #include "LinkedList.h"
 
-LinkedList::ListElement::ListElement(Program* element)
+template <typename T>
+LinkedList<T>::ListElement::ListElement(T* element)
 {
 	this->element = element;
 	this->next = nullptr;
 }
 
-LinkedList::ListElement::~ListElement()
+template <typename T>
+LinkedList<T>::ListElement::~ListElement()
 {
 	delete element;
 }
 
-Program& LinkedList::getByNegativeIndex(int neg_index)
+template <typename T>
+T& LinkedList<T>::getByNegativeIndex(int neg_index)
 {
 	ListElement* current_element = head;
 	int size = 0;
@@ -38,13 +41,15 @@ Program& LinkedList::getByNegativeIndex(int neg_index)
 	}
 }
 
-LinkedList::LinkedList()
+template <typename T>
+LinkedList<T>::LinkedList()
 {
 	head = nullptr;
 	tail = nullptr;
 }
 
-LinkedList::LinkedList(const LinkedList& other)
+template <typename T>
+LinkedList<T>::LinkedList(const LinkedList<T>& other)
 {
 	head = nullptr;
 	tail = nullptr;
@@ -57,7 +62,8 @@ LinkedList::LinkedList(const LinkedList& other)
 	}
 }
 
-LinkedList::~LinkedList()
+template <typename T>
+LinkedList<T>::~LinkedList()
 {
 	ListElement* current_element = head;
 	while (current_element)
@@ -68,7 +74,8 @@ LinkedList::~LinkedList()
 	}
 }
 
-LinkedList& LinkedList::operator=(const LinkedList& other)
+template <typename T>
+LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& other)
 {
 	if (this == &other)
 	{
@@ -96,56 +103,18 @@ LinkedList& LinkedList::operator=(const LinkedList& other)
 	return *this;
 }
 
-LinkedList& LinkedList::operator+=(const Program& rhs)
+template <typename T>
+LinkedList<T>& LinkedList<T>::operator+=(const T& rhs)
 {
 	this->addTail(rhs);
 	return *this;
 }
 
-LinkedList& LinkedList::operator-=(const std::string& rhs)
+// TODO: rework for template
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const LinkedList<T>& rhs)
 {
-	ListElement* current_element = head;
-	ListElement* prev_element = nullptr;
-	ListElement* temp;
-	while (current_element)
-	{
-		if (*(current_element->element) == rhs)
-		{
-			if (current_element == head)
-			{
-				temp = current_element;
-				current_element = current_element->next;
-				head = current_element;
-				delete temp;
-			}
-			else if (current_element == tail)
-			{
-				tail = prev_element;
-				delete current_element;
-				current_element = nullptr;
-				prev_element->next = nullptr;
-			}
-			else
-			{
-				temp = current_element;
-				prev_element->next = current_element->next;
-				prev_element = current_element;
-				current_element = current_element->next;
-				delete temp;
-			}
-		}
-		else
-		{
-			prev_element = current_element;
-			current_element = current_element->next;
-		}
-	}
-	return *this;
-}
-
-std::ostream& operator<< (std::ostream& os, const LinkedList& rhs)
-{
-	LinkedList::ListElement* current_element;
+	typename LinkedList<T>::ListElement* current_element;
 	int i = 0;
 	current_element = rhs.head;
 	while (current_element)
@@ -159,9 +128,11 @@ std::ostream& operator<< (std::ostream& os, const LinkedList& rhs)
 	return os;
 }
 
-void operator<< (std::ofstream& ofs, const LinkedList& rhs)
+// TODO: rework for template
+template <typename T>
+void operator<< (std::ofstream& ofs, const LinkedList<T>& rhs)
 {
-	LinkedList::ListElement* current_element = rhs.head;
+	typename LinkedList<T>::ListElement* current_element = rhs.head;
 
 	if (ofs.is_open())
 	{
@@ -173,20 +144,23 @@ void operator<< (std::ofstream& ofs, const LinkedList& rhs)
 	}
 }
 
-void operator>> (std::ifstream& ifs, LinkedList& rhs)
+template <typename T>
+void operator>> (std::ifstream& ifs, LinkedList<T>& rhs)
 {
-	std::string line;
+	T element;
 
 	if (ifs.is_open())
 	{
-		while (getline(ifs, line))
+		while (ifs.peek() != EOF)
 		{
-			rhs.addTail(Program(line));
+			ifs >> element;
+			rhs.addTail(element);
 		}
 	}
 }
 
-Program& LinkedList::operator[] (int index)
+template <typename T>
+T& LinkedList<T>::operator[] (int index)
 {	
 	if (index < 0)
 	{
@@ -198,23 +172,26 @@ Program& LinkedList::operator[] (int index)
 	}
 }
 
-LinkedList operator+ (const Program& lhs, const LinkedList& rhs)
+template <typename T>
+LinkedList<T> operator+ (const T& lhs, const LinkedList<T>& rhs)
 {
-	LinkedList lst = rhs;
+	LinkedList<T> lst = rhs;
 	lst.addHead(lhs);
 	return lst;
 }
 
-LinkedList operator+ (const LinkedList& lhs, const Program& rhs)
+template <typename T>
+LinkedList<T> operator+ (const LinkedList<T>& lhs, const T& rhs)
 {
-	LinkedList lst = lhs;
+	LinkedList<T> lst = lhs;
 	lst.addTail(rhs);
 	return lst;
 }
 
-void LinkedList::addTail(const Program& element)
+template <typename T>
+void LinkedList<T>::addTail(const T& element)
 {
-	ListElement* temp = new ListElement(new Program(element));
+	ListElement* temp = new ListElement(new T(element));
 	if (!head)
 	{
 		head = temp;
@@ -227,9 +204,10 @@ void LinkedList::addTail(const Program& element)
 	}
 }
 
-void LinkedList::addHead(const Program& element)
+template <typename T>
+void LinkedList<T>::addHead(const T& element)
 {
-	ListElement* temp = new ListElement(new Program(element));
+	ListElement* temp = new ListElement(new T(element));
 	if (!head)
 	{
 		head = temp;
@@ -242,7 +220,8 @@ void LinkedList::addHead(const Program& element)
 	}
 }
 
-void LinkedList::insert(const Program& element, int place)
+template <typename T>
+void LinkedList<T>::insert(const T& element, int place)
 {
 	if (place < 0)
 	{
@@ -293,13 +272,14 @@ void LinkedList::insert(const Program& element, int place)
 	// we're inside the list and we need to insert new element in place of existing one
 	else
 	{
-		ListElement* temp = new ListElement(new Program(element));
+		ListElement* temp = new ListElement(new T(element));
 		prev_element->next = temp;
 		temp->next = current_element;
 	}
 }
 
-Program LinkedList::removeHead()
+template <typename T>
+T LinkedList<T>::removeHead()
 {
 	// can't remove from empty list
 	if (!head)
@@ -309,7 +289,7 @@ Program LinkedList::removeHead()
 	// if list has only one element
 	else if (head == tail)
 	{
-		Program res = *head->element;
+		T res = *head->element;
 		delete head;
 		head = nullptr;
 		tail = nullptr;
@@ -318,7 +298,7 @@ Program LinkedList::removeHead()
 	// if list has more than one element
 	else
 	{
-		Program res = *head->element;
+		T res = *head->element;
 		ListElement* temp = head;
 		head = temp->next;
 		delete temp;
@@ -326,7 +306,8 @@ Program LinkedList::removeHead()
 	}
 }
 
-Program LinkedList::removeTail()
+template <typename T>
+T LinkedList<T>::removeTail()
 {
 	// can't remove from empty list
 	if (!head)
@@ -336,7 +317,7 @@ Program LinkedList::removeTail()
 	// if list has only one element
 	else if (head == tail)
 	{
-		Program res = *tail->element;
+		T res = *tail->element;
 		delete head;
 		head = nullptr;
 		tail = nullptr;
@@ -345,7 +326,7 @@ Program LinkedList::removeTail()
 	// if list has more than one element
 	else
 	{
-		Program res = *tail->element;
+		T res = *tail->element;
 		ListElement* current_element = head;
 		while (current_element->next != tail)
 		{
@@ -358,7 +339,8 @@ Program LinkedList::removeTail()
 	}
 }
 
-void LinkedList::remove(int place)
+template <typename T>
+void LinkedList<T>::remove(int place)
 {
 	if (place < 0)
 	{
@@ -403,7 +385,8 @@ void LinkedList::remove(int place)
 	}
 }
 
-void LinkedList::print()
+template <typename T>
+void LinkedList<T>::print()
 {
 	ListElement* current_element;
 	int i = 0;
@@ -411,14 +394,14 @@ void LinkedList::print()
 	while (current_element)
 	{
 		std::cout << "Element #" << i << ":" << std::endl;
-		current_element->element->print();
-		std::cout << std::endl;
+		std::cout << current_element->element << std::endl;
 		current_element = current_element->next;
 		i++;
 	}
 }
 
-Program& LinkedList::get(int place)
+template <typename T>
+T& LinkedList<T>::get(int place)
 {
 	int current_idx = 0;
 	ListElement* current_element = head;
@@ -444,7 +427,9 @@ Program& LinkedList::get(int place)
 	}
 }
 
-void LinkedList::save(const char* filename)
+// TODO: rework for template
+template <typename T>
+void LinkedList<T>::save(const char* filename)
 {
 	std::ofstream file(filename);
 	ListElement* current_element = head;
@@ -460,7 +445,9 @@ void LinkedList::save(const char* filename)
 	file.close();
 }
 
-void LinkedList::load(const char* filename)
+// TODO: rework for template
+template <typename T>
+void LinkedList<T>::load(const char* filename)
 {
 	std::ifstream file(filename);
 	std::string line;
@@ -469,30 +456,14 @@ void LinkedList::load(const char* filename)
 	{
 		while (getline(file, line))
 		{
-			this->addTail(Program(line));
+			this->addTail(T(line));
 		}
 	}
 	file.close();
 }
 
-LinkedList LinkedList::searchByName(std::string name)
-{
-	LinkedList result_list;
-	ListElement* current_element = head;
-
-	while (current_element)
-	{
-		if (*(current_element->element) == name)
-		{
-			result_list.addTail(*(current_element->element));
-		}
-		current_element = current_element->next;
-	}
-
-	return result_list;
-}
-
-bool LinkedList::isEmpty()
+template <typename T>
+bool LinkedList<T>::isEmpty()
 {
 	if (!head)
 	{

@@ -1,8 +1,3 @@
-#include <iostream>
-#include <string>
-#include <iomanip>
-#include <sstream>
-
 #include "Program.h"
 
 
@@ -176,31 +171,53 @@ std::istream& operator>> (std::istream& is, Program& rhs)
 	return is;
 }
 
-std::string Program::getName() { return name; }
+std::ofstream& operator<< (std::ofstream& ofs, Program& rhs)
+{
+	if (ofs.is_open())
+	{
+		ofs << rhs.toString();
+	}
+	return ofs;
+}
+
+std::ifstream& operator>> (std::ifstream& ifs, Program& rhs)
+{
+	std::string line;
+	if (ifs.is_open())
+	{
+		if (getline(ifs, line))
+		{
+			rhs.fromString(line);
+		}
+	}
+	return ifs;
+}
+
+std::string Program::getName() const { return name; }
 void Program::setName(std::string name) { this->name = name; }
 
-std::string Program::getVersion() { return version; }
+std::string Program::getVersion() const { return version; }
 void Program::setVersion(std::string version) { this->version = version; }
 
-bool Program::getAndroid() { return android; }
+bool Program::getAndroid() const { return android; }
 void Program::setAndroid(bool android) { this->android = android; }
 
-bool Program::getIos() { return ios; }
+bool Program::getIos() const { return ios; }
 void Program::setIos(bool ios) { this->ios = ios; }
 
-bool Program::getFree() { return free; }
+bool Program::getFree() const { return free; }
 void Program::setFree(bool free) { this->free = free; }
 
-double Program::getPrice() { return price; }
+double Program::getPrice() const { return price; }
 void Program::setPrice(float price) { this->price = price; }
 
-std::string Program::getDeveloper() { return developer; }
+std::string Program::getDeveloper() const { return developer; }
 void Program::setDeveloper(std::string developer) { this->developer = developer; }
 
-bool Program::getOpenSource() { return open_source; }
+bool Program::getOpenSource() const { return open_source; }
 void Program::setOpenSource(bool open_source) { this->open_source = open_source; }
 
-std::string Program::getLang() { return lang; }
+std::string Program::getLang() const { return lang; }
 void Program::setLang(std::string lang) { this->lang = lang; }
 
 void Program::read()
