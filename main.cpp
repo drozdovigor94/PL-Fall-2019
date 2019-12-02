@@ -3,74 +3,60 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
+
 
 #include "Program.h"
-#include "LinkedList.h"
-#include "PushPop.h"
+#include "DerivedList.h"
 
-#include "LinkedList.h"
-#include "Program.h"
-
-#include<iostream>
-#include<fstream>
-
-//void testPushPop(PushPop* pp)
-//{
-//	pp->push(Program("MyApp", "1.0", true, true, false, 9.99, "Me", false, "C++"));
-//	pp->push(Program("Someone's App", "2.3b", true, false, true, 0, "Some jerk", true, "Java"));
-//	pp->push(Program("YetAnotherApp", "0.7", false, true, false, 5, "Unknown", false, "ObjectiveC"));
-//	pp->push(Program("Instagram", "3.5", true, true, true, 0, "Facebook", false, "Java"));
-//
-//	while (!pp->isEmpty())
-//	{
-//		std::cout << pp->pop();
-//	}
-//}
-
-bool programEqualsName(const Program& prog, const std::string& name)
+bool comparePrice(const Program& a, const Program& b)
 {
-	if (prog.getName() == name)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (a.getPrice() < b.getPrice());
 }
 
-bool programGreaterThanPrice(const Program& prog, const double& price)
+struct findByNamePred
 {
-	if (prog.getPrice() > price)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
+	char cond;
+	std::string value;
 
-bool doubleLEQ(const double& d, const double& value)
-{
-	if (d <= value)
+	findByNamePred(char cond, const std::string value) : cond(cond), value(value) {}
+	bool operator() (const Program& p)
 	{
-		return true;
+		switch (cond)
+		{
+		case '=':
+			return (p.getName() == value);
+			break;
+		case '<':
+			return (p.getName() < value);
+			break;
+		case '>':
+			return (p.getName() > value);
+			break;
+		default:
+			break;
+		}
 	}
-	else
-	{
-		return false;
-	}
-}
+};
 
 int main()
 {
-	LinkedList<Program> lst;
+	DerivedList<Program> lst;
+	//lst->addTail(new Program("MyApp", "1.0", true, true, false, 9.99, "Me", false, "C++"));
+	//lst->addTail(new Program("Someone's App", "2.3b", true, false, true, 0, "Some jerk", true, "Java"));
+	//lst->addTail(new Program("YetAnotherApp", "0.7", false, true, false, 5, "Unknown", false, "ObjectiveC"));
 	std::ifstream ifs("list.txt");
 	ifs >> lst;
-	std::cout << lst << "\n\n\n";
-	LinkedList<Program> filteredLst = lst.filter<std::string>("YetAnotherApp", &programEqualsName);
-	std::cout << "Filtered List:" << std::endl;
-	std::cout << filteredLst;
+	DerivedList<Program> lst2;
+	lst2.push_back(Program("MyApp", "1.0", true, true, false, 9.99, "Me", false, "C++"));
+	lst2.push_back(Program("YetAnotherApp", "0.7", false, true, false, 5, "Unknown", false, "ObjectiveC"));
+	//std::cout << (lst + lst2);
+	
+	//lst.sort(&comparePrice);
+	//std::cout << lst;
 
+	auto res = std::find_if(lst.begin(), lst.end(), findByNamePred('=', "YetAnotherApp"));
+	std::cout << *res;
+
+	return 0;
 }

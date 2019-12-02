@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DerivedList.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Program.h" />
   </ItemGroup>
